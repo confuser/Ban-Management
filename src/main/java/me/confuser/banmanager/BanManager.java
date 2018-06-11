@@ -9,6 +9,7 @@ import me.confuser.banmanager.commands.*;
 import me.confuser.banmanager.commands.global.*;
 import me.confuser.banmanager.configs.*;
 import me.confuser.banmanager.listeners.*;
+import me.confuser.banmanager.managers.ReportManager;
 import me.confuser.banmanager.runnables.*;
 import me.confuser.banmanager.storage.*;
 import me.confuser.banmanager.storage.global.*;
@@ -119,6 +120,9 @@ public class BanManager extends BukkitPlugin {
   @Getter
   private Runner syncRunner;
 
+  @Getter
+  private ReportManager reportManager;
+
   @Override
   public void onEnable() {
     plugin = this;
@@ -154,6 +158,7 @@ public class BanManager extends BukkitPlugin {
       e.printStackTrace();
     }
 
+    setupManagers();
     setupListeners();
     setupCommands();
     setupRunnables();
@@ -333,6 +338,10 @@ public class BanManager extends BukkitPlugin {
     ds.addDataSourceProperty("cachePrepStmts", "true");
 
     return new DataSourceConnectionSource(ds, new MySQLDatabase());
+  }
+
+  public void setupManagers() {
+    reportManager = new ReportManager();
   }
 
   @SuppressWarnings("unchecked")

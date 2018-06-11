@@ -1,6 +1,7 @@
 package me.confuser.banmanager.listeners;
 
 import me.confuser.banmanager.BanManager;
+import me.confuser.banmanager.commands.report.ContinuingReport;
 import me.confuser.banmanager.data.IpMuteData;
 import me.confuser.banmanager.data.PlayerMuteData;
 import me.confuser.banmanager.data.PlayerWarnData;
@@ -10,6 +11,7 @@ import me.confuser.banmanager.util.IPUtils;
 import me.confuser.banmanager.util.UUIDUtils;
 import me.confuser.bukkitutil.Message;
 import me.confuser.bukkitutil.listeners.Listeners;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.sql.SQLException;
@@ -19,6 +21,45 @@ public class ChatListener extends Listeners<BanManager> {
 
   public void onPlayerChat(AsyncPlayerChatEvent event) {
     UUID uuid = UUIDUtils.getUUID(event.getPlayer());
+
+    ContinuingReport report = plugin.getReportManager().get(uuid);
+
+    if (report != null) {
+      event.setCancelled(true);
+
+      // @TODO Change if causes CME
+      for (Player player : event.getRecipients()) {
+        if (plugin.getReportManager().has(uuid)) event.getRecipients().remove(player);
+      }
+
+      if (report.getReason().size() == plugin.getConfiguration().getMaxReportLines()) {
+        Message.get("report.mode.maxLines")
+               .sendTo(event.getPlayer());
+      } else if (event.getMessage().startsWith("#delete")) {
+        int lineNumber;
+
+        try {
+          lineNumber = Integer.parseInt(event.getMessage().replace("#delete", ""));
+        } catch (NumberFormatException e) {
+          return;
+        }
+
+        if (report.getReason().size() > lineNumber && lineNumber > 0) return;
+        report.getReason().remove(lineNumber - 1);
+
+        Message.get("report.mode.removeLine").set("line", lineNumber).sendTo(event.getPlayer());
+
+        return;
+      } else {
+        report.getReason().add(event.getMessage());
+
+        Message.get("report.mode.addLine")
+               .set("message", event.getMessage())
+               .sendTo(event.getPlayer());
+      }
+
+      return;
+    }
 
     if (!plugin.getPlayerMuteStorage().isMuted(uuid)) {
       if (plugin.getPlayerWarnStorage().isMuted(uuid)) {

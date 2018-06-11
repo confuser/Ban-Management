@@ -77,4 +77,5 @@ public class PlayerBanData {
             && ban.getPlayer().getUUID().equals(this.getPlayer().getUUID())
             && ban.getActor().getUUID().equals(this.actor.getUUID());
   }
+
 }

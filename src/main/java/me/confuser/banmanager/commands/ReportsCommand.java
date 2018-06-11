@@ -39,6 +39,4 @@ public class ReportsCommand extends MultiCommandHandler<BanManager> {
 
     return super.onCommand(sender, command, commandName, args);
   }
-
-
 }

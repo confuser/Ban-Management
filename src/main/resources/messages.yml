@@ -325,9 +325,18 @@ messages:
       noOnlineNotes: '&cNo online players have notes'
 
   report:
+    mode:
+      enabled: '&cReporting [player], please type your reasons into chat, and type "/report save" when finished, or type "/report abort" if this was a mistake'
+      disabled: '&cReporting aborted'
+      addLine: '&a[message] &6Type /report save to finish, or /report abort to exit'
+      removeLine: '&a[line] line number removed'
+      maxLines: '&cReport length limit reached, please type &6/report save'
     notify: '&6[player] has been reported by [actor] for &4[reason]'
     error:
       cooldown: '&cThis player was reported too recently, try again later'
+      mode: '&cYou are not in report mode'
+      missingReason: '&cEmpty report reason, aborting'
+      alreadyEnabled: '&cYou are already in report mode, reporting [player], please type "/report save" or "/report abort" to exit'
     assign:
       player: '&aReport [id] assigned to [player]'
       notify: '&aYou have been assigned report [id] by [actor]'

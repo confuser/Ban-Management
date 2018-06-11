@@ -200,3 +200,6 @@ onlineMode: true
 # highest
 # monitor
 chatPriority: normal
+
+reports:
+  maxLines: 20

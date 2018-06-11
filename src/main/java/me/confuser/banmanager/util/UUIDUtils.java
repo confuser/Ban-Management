@@ -3,6 +3,7 @@ package me.confuser.banmanager.util;
 import com.google.common.collect.ImmutableList;
 import me.confuser.banmanager.BanManager;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.json.simple.JSONArray;
@@ -158,6 +159,14 @@ public class UUIDUtils implements Callable<Map<String, UUID>> {
     } catch (UnsupportedEncodingException e) {
       return null;
     }
+  }
+
+  public static UUID getUUID(CommandSender sender) {
+    if (sender instanceof Player) {
+      return UUIDUtils.getUUID((Player) sender);
+    }
+
+    return BanManager.getPlugin().getConsoleConfig().getUuid();
   }
 
   public Map<String, UUID> call() throws Exception {
